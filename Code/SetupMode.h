@@ -59,13 +59,14 @@ void handlerCaptureBright() {
 }
 
 void handlerBrightnessMin() {
- String birthday_removed = webServer.arg("bightness_min"); 
+ String brightness = webServer.arg("bightness_min"); 
+ //Try uint16_t  brightness = (uint16_t)webServer.arg("bightness_min").toInt();
  setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
  logAndRespond("Dim Room LED Brightness set to " + birthday_removed + " out of 225");
 }
 
 void handlerBrightnessMax() {
- String birthday_removed = webServer.arg("bightness_max"); 
+ String brightness = webServer.arg("bightness_max"); 
  setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
  logAndRespond("Bright Room LED Brightness set to " + birthday_removed + " out of 225");
 }
