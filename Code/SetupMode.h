@@ -15,7 +15,7 @@ void logAndRespond(String printLog = "") {
  webServer.send(200, "text/html", generateResponse(printLog));
 }
 
-void setDateTime() {
+void handlerDateTime() {
  String inDate = webServer.arg("date"); 
  String inTime = webServer.arg("time"); 
  int year = inDate.substring(0,4).toInt();
@@ -27,52 +27,50 @@ void setDateTime() {
  logAndRespond("New Date and Time is " + inDate + " " + inTime);
 }
 
-void birthdayAdd() {
+void handlerBirthdayAdd() {
  String birthday_new = webServer.arg("birthday_new"); 
  if(birthday_new == ""){
   logAndRespond("No date was set to be added");
   return;
  }
- //Do stuff here
- //Write to EEPROM
+ addBirthday();
  logAndRespond("Added Birthday " + birthday_new);
 }
 
-void birthdayRemove() {
+void handlerBirthdayRemove() {
  String birthday_index = webServer.arg("birthday_index"); 
  String birthday_date = webServer.arg("birthday_date"); 
- //Do stuff here
- //Write to EEPROM
+ removeBirthday();
  logAndRespond("Remove Birthday " + birthday_date + " at index " + birthday_index);
 }
 
-void captureDim() {
- //Do stuff here
- //Write to EEPROM
- logAndRespond("Captured Dim Room at " + String(4864));
+void handlerCaptureDim() {
+ //Capture value
+ uint16_t sensorReading = 200;
+ setConfigVariable(sensorMin, EE_SENSORMIN, sensorReading);
+ logAndRespond("Captured Dim Room at " + String(sensorReading));
 }
 
-void captureBright() {
- //Do stuff here
- //Write to EEPROM
- logAndRespond("Captured Bright Room at " + String(4864));
+void handlerCaptureBright() {
+ //Capture value
+ uint16_t sensorReading = 900;
+ setConfigVariable(sensorMax, EE_SENSORMAX, sensorReading);
+ logAndRespond("Captured Bright Room at " + String(sensorReading));
 }
 
-void brightnessMin() {
+void handlerBrightnessMin() {
  String birthday_removed = webServer.arg("bightness_min"); 
- //Do stuff here
- //Write to EEPROM
+ setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
  logAndRespond("Dim Room LED Brightness set to " + birthday_removed + " out of 225");
 }
 
-void brightnessMax() {
+void handlerBrightnessMax() {
  String birthday_removed = webServer.arg("bightness_max"); 
- //Do stuff here
- //Write to EEPROM
+ setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
  logAndRespond("Bright Room LED Brightness set to " + birthday_removed + " out of 225");
 }
 
-void endSetup() {
+void handlerEndSetup() {
  isSetupDone = true;
  Serial.println("    User has finished setup");
 }
@@ -90,14 +88,14 @@ void enterSetup() {
   webServer.onNotFound([]() {
     webServer.send(200, "text/html", generateResponse());
   });
-  webServer.on("/datetime", setDateTime);
-  webServer.on("/birthday_add", birthdayAdd);
-  webServer.on("/birthday_remove", birthdayRemove);
-  webServer.on("/capture_dim", captureDim);
-  webServer.on("/capture_bright", captureBright);
-  webServer.on("/bightness_min", brightnessMin);
-  webServer.on("/bightness_max", brightnessMax);
-  webServer.on("/end_setup", endSetup);
+  webServer.on("/datetime", handlerDateTime);
+  webServer.on("/birthday_add", handlerBirthdayAdd);
+  webServer.on("/birthday_remove", handlerBirthdayRemove);
+  webServer.on("/capture_dim", handlerCaptureDim);
+  webServer.on("/capture_bright", handlerCaptureBright);
+  webServer.on("/bightness_min", handlerBrightnessMin);
+  webServer.on("/bightness_max", handlerBrightnessMax);
+  webServer.on("/end_setup", handlerEndSetup);
   
   webServer.begin();
   Serial.println("    Webserver Started");
@@ -117,7 +115,6 @@ void exitSetup() {
 void runSetup(){
   enterSetup();
   int exitMillis = millis() + 300000; //5 minutes
-  delay(1000);
   while(millis()< exitMillis && isSetupDone != true){
     loopSetup();
   }
