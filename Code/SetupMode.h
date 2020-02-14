@@ -16,59 +16,54 @@ void logAndRespond(String printLog = "") {
 }
 
 void handlerDateTime() {
- String inDate = webServer.arg("date"); 
+ Date inDate = stringToDate(webServer.arg("date")); 
  String inTime = webServer.arg("time"); 
- int year = inDate.substring(0,4).toInt();
- int month = inDate.substring(5,7).toInt();
- int day = inDate.substring(8,10).toInt();
  int hour = inTime.substring(0,2).toInt();
  int minute = inTime.substring(3,5).toInt();
- rtc.adjust(DateTime(year, month, day, hour, minute, 0));
- logAndRespond("New Date and Time is " + inDate + " " + inTime);
+ rtc.adjust(DateTime(inDate.year, inDate.month, inDate.day, hour, minute, 0));
+ logAndRespond("New Date and Time is " + dateToString(inDate) + " " + inTime);
 }
 
 void handlerBirthdayAdd() {
- String birthday_new = webServer.arg("birthday_new"); 
- if(birthday_new == ""){
+ String birthday = webServer.arg("birthday_new"); 
+ if(birthday == ""){
   logAndRespond("No date was set to be added");
-  return;
  }
- addBirthday();
- logAndRespond("Added Birthday " + birthday_new);
+ addBirthday(stringToDate(birthday));
+ logAndRespond("Added Birthday " + birthday);
 }
 
 void handlerBirthdayRemove() {
- String birthday_index = webServer.arg("birthday_index"); 
- String birthday_date = webServer.arg("birthday_date"); 
- removeBirthday();
- logAndRespond("Remove Birthday " + birthday_date + " at index " + birthday_index);
+ uint8_t birthdayIndex = webServer.arg("birthday_index").toInt(); 
+ String birthday = webServer.arg("birthday_date"); 
+ removeBirthday(birthdayIndex);
+ logAndRespond("Remove Birthday " + birthday + " at index " + birthdayIndex);
 }
 
 void handlerCaptureDim() {
  //Capture value
  uint16_t sensorReading = 200;
- setConfigVariable(sensorMin, EE_SENSORMIN, sensorReading);
+ setConfigVariable(EE_SENSORMIN, sensorMin, sensorReading);
  logAndRespond("Captured Dim Room at " + String(sensorReading));
 }
 
 void handlerCaptureBright() {
  //Capture value
  uint16_t sensorReading = 900;
- setConfigVariable(sensorMax, EE_SENSORMAX, sensorReading);
+ setConfigVariable(EE_SENSORMAX, sensorMax, sensorReading);
  logAndRespond("Captured Bright Room at " + String(sensorReading));
 }
 
 void handlerBrightnessMin() {
- String brightness = webServer.arg("bightness_min"); 
- //Try uint16_t  brightness = (uint16_t)webServer.arg("bightness_min").toInt();
- setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
- logAndRespond("Dim Room LED Brightness set to " + birthday_removed + " out of 225");
+ uint16_t brightness = (uint16_t)(webServer.arg("bightness_min").toInt());
+ setConfigVariable(EE_BRIGHTNESSMIN, brightnessMin, brightness);
+ logAndRespond("Dim Room LED Brightness set to " + (String)brightnessMin + " out of 767");
 }
 
 void handlerBrightnessMax() {
- String brightness = webServer.arg("bightness_max"); 
- setConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 0); //String to uint16_t
- logAndRespond("Bright Room LED Brightness set to " + birthday_removed + " out of 225");
+ uint16_t brightness = (uint16_t)(webServer.arg("bightness_max").toInt());
+ setConfigVariable(EE_BRIGHTNESSMAX, brightnessMax, brightness);
+ logAndRespond("Bright Room LED Brightness set to " + (String)brightnessMax + " out of 767");
 }
 
 void handlerEndSetup() {

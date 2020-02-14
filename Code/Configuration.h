@@ -7,54 +7,63 @@
 #define EE_BIRTHDAYS 8
 
 //Photosensor
-uint16_t sensorMin; //0
-uint16_t sensorMax; //1024
+uint16_t sensorMin = 0;
+uint16_t sensorMax = 1024;
 //3 white diodes with a range of 0-255 per pixel
-uint16_t brightnessMin; //0
-uint16_t brightnessMax; //767
-//When setting the value of the pixels increase across all diodes
-//212 (70,70,70)
-//213 (71,70,70)
-//214 (71,71,70)
-//215 (71,71,71)
-//216 (72,71,71)
-//217 (72,72,71)
-
+uint16_t brightnessMin = 0;
+uint16_t brightnessMax = 767;
+//Bithday dates will have Happy Birthday on LED clock on day of
+//Only 10 datesnare really needed
 struct Date {
   uint16_t year;
   uint8_t month;
   uint8_t day;
 };
-
-//Date birthdays[0];
-
-void loadConfigVariable(uint16_t& variable, int eeAddr, uint16_t fallbackValue){
-  EEPROM.get(eeAddr, variable);
+//Currently using values for testing
+Date birthdays[10] = {{1992, 04, 23},
+                      {1993, 04, 2},
+                      {2010, 04, 12},
+                      {1989, 7, 15},
+                      {1790, 04, 12},
+                      {2011, 12, 2},
+                      {3512, 12, 22}};
+                      
+Date stringToDate(String inDate){
+  Date outDate;
+  outDate.year = inDate.substring(0,4).toInt();
+  outDate.month = inDate.substring(5,7).toInt();
+  outDate.day = inDate.substring(8,10).toInt();
+  return outDate;
 }
 
-void setConfigVariable(uint16_t& variable, int eeAddr, uint16_t value){
+String dateToString(Date inDate){
+  String outDate = (String)inDate.year + "-";
+  if (inDate.month < 10){outDate += "0";}
+  outDate += (String)inDate.month + "-";
+  if (inDate.day < 10){outDate += "0";}
+  outDate +=(String)inDate.day;
+  return outDate;
+}
+
+void setConfigVariable(int eeAddr, uint16_t& variable, uint16_t value){
   variable = value;
   EEPROM.put(eeAddr, variable);  
   EEPROM.commit();
 }
 
-void loadBirthdays(){
-  //load from EEPROM
-}
-
-void addBirthday(){
+void addBirthday(Date birthday){
   //Set Birthdays
   //Save to EEPROM
 }
 
-void removeBirthday(){
+void removeBirthday(int birthdayIndex){
   //Set Birthdays
   //Save to EEPROM
 }
 void loadConfig(){
-  loadConfigVariable(sensorMin, EE_SENSORMIN, 0);
-  loadConfigVariable(sensorMax, EE_SENSORMAX, 1024);
-  loadConfigVariable(brightnessMin, EE_BRIGHTNESSMIN, 200);
-  loadConfigVariable(brightnessMax, EE_BRIGHTNESSMAX, 600);
-  loadBirthdays();
+  EEPROM.get(EE_SENSORMIN, sensorMin);
+  EEPROM.get(EE_SENSORMAX, sensorMax);
+  EEPROM.get(EE_BRIGHTNESSMIN, brightnessMin);
+  EEPROM.get(EE_BRIGHTNESSMAX, brightnessMax);
+  //EEPROM.get(EE_BRITHDAYS, birthdays);
 }

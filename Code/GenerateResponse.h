@@ -33,17 +33,21 @@ String generateResponse(String lastAction = ""){
                "      <input type='submit' value='Sync Device Time to Clock'>\n"
                "    </form>\n"
                ""
-               "    <h3>Birthdays</h3>\n"
-               "    <form action='/birthday_add'>\n"
+               "    <h3>Birthdays</h3>\n";
+  if (birthdays[9].year == 0) {      
+    response +="    <form action='/birthday_add'>\n"
                "      <input type='date' name='birthday_new'>\n"
                "      <input type='submit' value='add'>\n"
                "    </form>\n";
-  for (int i = 0; i <= 3; i++) {              
-    response += "    <form action='/birthday_remove'>\n"
-                "      <input type='text' name='birthday_index' value='" + String(i) + "' hidden>\n"
-                "      <input type='date' name='birthday_date' value='2020-02-09' readonly>\n"
-                "      <input type='submit' value='Remove'>\n"
-                "    </form>\n";
+  }
+  for (int i = 0; i < 10; i++) {      
+    if (birthdays[i].year != 0) {
+      response += "    <form action='/birthday_remove'>\n"
+                  "      <input type='text' name='birthday_index' value='" + String(i) + "' hidden>\n"
+                  "      <input type='date' name='birthday_date' value='" + dateToString(birthdays[i])  + "' readonly>\n"
+                  "      <input type='submit' value='Remove'>\n"
+                  "    </form>\n";
+    }
   }
   response += "    <h3>Brightness Controls</h3>\n"
               "    <form action='/capture_dim'>\n"
@@ -53,11 +57,11 @@ String generateResponse(String lastAction = ""){
               "      <input type='submit' value='Capture Bright Room'>\n"
               "    </form>\n"
               "    <form action='/bightness_min'>\n"
-              "      Dim Room Brightness: <input type='range' name='bightness_min' min='1' max='767'>\n"
+              "      Dim Room Brightness: <input type='range' name='bightness_min' min='1' max='767' value='" + (String)brightnessMin + "'>\n"
               "      <input type='submit'>\n"
               "    </form>\n"
               "    <form action='/bightness_max'>\n"
-              "      Bright Room Brightness: <input type='range' name='bightness_max' min='1' max='767'>\n"
+              "      Bright Room Brightness: <input type='range' name='bightness_max' min='1' max='767' value='" + (String)brightnessMax + "'>\n"
               "      <input type='submit'>\n"
               "    </form>\n"
               "    <br>\n"
