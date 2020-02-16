@@ -15,18 +15,12 @@ uint16_t brightnessMax = 767;
 //Bithday dates will have Happy Birthday on LED clock on day of
 //Only 10 datesnare really needed
 struct Date {
+  Date() : year(0), month(0), day(0) {}
   uint16_t year;
   uint8_t month;
   uint8_t day;
 };
-//Currently using values for testing
-Date birthdays[10] = {{1992, 04, 23},
-                      {1993, 04, 2},
-                      {2010, 04, 12},
-                      {1989, 7, 15},
-                      {1790, 04, 12},
-                      {2011, 12, 2},
-                      {3512, 12, 22}};
+Date birthdays[10];
                       
 Date stringToDate(String inDate){
   Date outDate;
@@ -52,18 +46,47 @@ void setConfigVariable(int eeAddr, uint16_t& variable, uint16_t value){
 }
 
 void addBirthday(Date birthday){
-  //Set Birthdays
-  //Save to EEPROM
+  int birthdayIndex = 0;
+  while (birthdays[birthdayIndex].year != 0){
+    birthdayIndex++;
+  }
+  birthdays[birthdayIndex] = birthday;
+  EEPROM.put(EE_BIRTHDAYS, birthdays); 
+  EEPROM.commit();
 }
 
-void removeBirthday(int birthdayIndex){
-  //Set Birthdays
-  //Save to EEPROM
+void removeBirthday(int index){
+  int birthdayIndex = index;
+  while (birthdayIndex < 9){
+    if (birthdays[birthdayIndex+1].year != 0){
+      birthdays[birthdayIndex] = birthdays[birthdayIndex+1];
+    }
+    else {
+      birthdays[birthdayIndex] = Date();
+    }
+    birthdayIndex++;
+  }
+  birthdays[birthdayIndex] = Date();
+  EEPROM.put(EE_BIRTHDAYS, birthdays);
+  EEPROM.commit();
 }
+
 void loadConfig(){
+  Serial.println("Loading Config from EEPROM:");
   EEPROM.get(EE_SENSORMIN, sensorMin);
   EEPROM.get(EE_SENSORMAX, sensorMax);
   EEPROM.get(EE_BRIGHTNESSMIN, brightnessMin);
   EEPROM.get(EE_BRIGHTNESSMAX, brightnessMax);
-  //EEPROM.get(EE_BRITHDAYS, birthdays);
+  EEPROM.get(EE_BIRTHDAYS, birthdays);
+}
+
+void printConfig(){
+  Serial.println("    sensorMin: " + (String)sensorMin);
+  Serial.println("    sensorMax: " + (String)sensorMax);
+  Serial.println("    brightnessMin: " + (String)brightnessMin);
+  Serial.println("    brightnessMax: " + (String)brightnessMax);
+  for (int i = 0; i < 10; i++) {
+    Serial.println("    birthday[" + (String)i + "]: " + dateToString(birthdays[i]));
+  }
+  Serial.println("");
 }

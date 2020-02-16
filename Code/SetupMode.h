@@ -2,6 +2,7 @@
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
 #include "GenerateResponse.h"
+#include "styleSheet.min.h"
 
 const byte DNS_PORT = 53;
 IPAddress apIP(172, 217, 28, 1);
@@ -24,6 +25,10 @@ void handlerDateTime() {
  logAndRespond("New Date and Time is " + dateToString(inDate) + " " + inTime);
 }
 
+void handlerHome() {
+ logAndRespond();
+}
+
 void handlerBirthdayAdd() {
  String birthday = webServer.arg("birthday_new"); 
  if(birthday == ""){
@@ -41,34 +46,31 @@ void handlerBirthdayRemove() {
 }
 
 void handlerCaptureDim() {
- //Capture value
- uint16_t sensorReading = 200;
+ uint16_t sensorReading = analogRead(lightSensorPin);
  setConfigVariable(EE_SENSORMIN, sensorMin, sensorReading);
  logAndRespond("Captured Dim Room at " + String(sensorReading));
 }
 
 void handlerCaptureBright() {
- //Capture value
- uint16_t sensorReading = 900;
+ uint16_t sensorReading = analogRead(lightSensorPin);
  setConfigVariable(EE_SENSORMAX, sensorMax, sensorReading);
  logAndRespond("Captured Bright Room at " + String(sensorReading));
 }
 
-void handlerBrightnessMin() {
- uint16_t brightness = (uint16_t)(webServer.arg("bightness_min").toInt());
- setConfigVariable(EE_BRIGHTNESSMIN, brightnessMin, brightness);
- logAndRespond("Dim Room LED Brightness set to " + (String)brightnessMin + " out of 767");
+void handlerBrightness() {
+ uint16_t newMin = (uint16_t)(webServer.arg("brightness_min").toInt());
+ uint16_t newMax = (uint16_t)(webServer.arg("brightness_max").toInt());
+ setConfigVariable(EE_BRIGHTNESSMIN, brightnessMin, newMin);
+ setConfigVariable(EE_BRIGHTNESSMAX, brightnessMax, newMax);
+ logAndRespond("LED Brightness Min is " + (String)newMin + " and Max is " + (String)newMax);
 }
 
-void handlerBrightnessMax() {
- uint16_t brightness = (uint16_t)(webServer.arg("bightness_max").toInt());
- setConfigVariable(EE_BRIGHTNESSMAX, brightnessMax, brightness);
- logAndRespond("Bright Room LED Brightness set to " + (String)brightnessMax + " out of 767");
+void handlerStyleSheet() {
+ webServer.send(200, "text/css", styleSheet);
 }
 
 void handlerEndSetup() {
  isSetupDone = true;
- Serial.println("    User has finished setup");
 }
 
 void enterSetup() {
@@ -82,15 +84,18 @@ void enterSetup() {
 
   // replay to all requests with same HTML
   webServer.onNotFound([]() {
-    webServer.send(200, "text/html", generateResponse());
+    Serial.print("    Page Not Found: ");
+    Serial.print(webServer.uri());
+    handlerHome();
   });
+  webServer.on("/", handlerHome);
+  webServer.on("/styleSheet.min.css", handlerStyleSheet);
   webServer.on("/datetime", handlerDateTime);
   webServer.on("/birthday_add", handlerBirthdayAdd);
   webServer.on("/birthday_remove", handlerBirthdayRemove);
   webServer.on("/capture_dim", handlerCaptureDim);
   webServer.on("/capture_bright", handlerCaptureBright);
-  webServer.on("/bightness_min", handlerBrightnessMin);
-  webServer.on("/bightness_max", handlerBrightnessMax);
+  webServer.on("/brightness", handlerBrightness);
   webServer.on("/end_setup", handlerEndSetup);
   
   webServer.begin();
@@ -109,12 +114,26 @@ void exitSetup() {
 }
 
 void runSetup(){
+  Serial.println("Entering Setup Mode:");
   enterSetup();
   int exitMillis = millis() + 300000; //5 minutes
-  while(millis()< exitMillis && isSetupDone != true){
+  bool hadConnection = false;
+  int numConnections = 0;
+  while((millis()< exitMillis && hadConnection == false || hadConnection && numConnections > 0) && isSetupDone != true){ 
     loopSetup();
+    numConnections = WiFi.softAPgetStationNum();
+    if (hadConnection == false && numConnections > 0){
+      Serial.println("    A user has connected");
+      hadConnection = true;
+    }
   }
-  if(millis() >= exitMillis){
+  if(isSetupDone){
+    Serial.println("    User has finished setup");
+  }
+  else if(hadConnection){
+    Serial.println("    Last user has disconnected");
+  }
+  else if(millis() >= exitMillis){
     Serial.println("    Setup has exceeded 5 minutes");
   }
   exitSetup();
