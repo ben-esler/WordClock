@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Word Clock Setup</title>
+  <link rel='icon' href='data:,'>
+  <link rel='stylesheet' type='text/css' href='styleSheet.min.css'>  <script>
+    function getDeviceTime() {
+      var d = new Date();
+      document.getElementById('date').value = d.toISOString().split('T')[0];
+      h = (d.getHours()<10?'0':'') + d.getHours();
+      m = (d.getMinutes()<10?'0':'') + d.getMinutes();
+     document.getElementById('time').value = h + ':' + m;
+    }
+  </script>
+</head>
+<body>
+  <center>
+    <h1>Word Clock Setup:</h1>
+    <form class='setTime'  action='/datetime'>
+      <input type='date' name='date' value='2020-02-16'>
+      <input type='time' name='time' value='01:04' step='60'>
+      <input type='submit' value='Set'>
+    </form>
+    <form class='findTime' action='/datetime' onsubmit='return getDeviceTime()'>
+      <input type='date' name='date' id='date' value='2020-10-31' hidden>
+      <input type='time' name='time' id='time' value='02:57' hidden>
+      <input type='submit' value='Sync Device Time to Clock'>
+    </form>
+    <h3>Birthdays</h3>
+    <form class='birthday add' action='/birthday_add'>
+      <input type='date' name='birthday_new'>
+      <input type='submit' value='add'>
+    </form>
+    <form class='birthday remove' action='/birthday_remove'>
+      <input type='text' name='birthday_index' value='0' hidden>
+      <input type='date' name='birthday_date' value='1998-08-05' readonly>
+      <input type='submit' value='Remove'>
+    </form>
+    <form class='birthday remove' action='/birthday_remove'>
+      <input type='text' name='birthday_index' value='1' hidden>
+      <input type='date' name='birthday_date' value='1989-03-05' readonly>
+      <input type='submit' value='Remove'>
+    </form>
+    <form class='birthday remove' action='/birthday_remove'>
+      <input type='text' name='birthday_index' value='2' hidden>
+      <input type='date' name='birthday_date' value='2003-11-27' readonly>
+      <input type='submit' value='Remove'>
+    </form>
+    <h3>Brightness Controls</h3>
+    <form class='capture dim' action='/capture_dim'>
+      <input type='submit' value='Capture Dim Room'>
+    </form>
+    <form class='capture bright' action='/capture_bright'>
+      <input type='submit' value='Capture Bright Room'>
+    </form>
+    <form class='brightness' action='/brightness'>
+      <div class='multi-range' data-lbound='200' data-ubound='500'>
+        <input name='brightness_min' type='range' min='1' max='757' step='1' value='200' oninput='this.parentNode.dataset.lbound=this.value;'/>
+        <input name='brightness_max' type='range'  min='1' max='757' step='1' value='500' oninput='this.parentNode.dataset.ubound=this.value;'/>
+      </div>
+      <input value='Set Brightness' type='submit'>
+    </form>
+    <br>
+    <p class='log'>Added Birthday 2003-11-27</p>
+    <br>
+    <form class='exit' action='/end_setup'>
+      <input type='submit' value='Exit Setup'>
+    </form>
+    <br>
+  </center>
+</body>
