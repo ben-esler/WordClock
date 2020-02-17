@@ -8,12 +8,19 @@ ESP8266 based clock that spells the time with LEDs
 - [About](#about)
 - [Libraries](#libraries)
 - [Physical Build](#physical-build)
-  * [Physical Build](#physical-build)
+  * [Components](#components)
+  * [Hardware](#hardware)
 - [Usage](#usage)
   * [Setup Mode](#setup-mode)
 
 ## Libraries
 ## Physical Build
+### Componenets
+- [Adafruit Feather HUZZAH with ESP8266](https://www.adafruit.com/product/2821)
+- [Adafruit DS1307](https://www.adafruit.com/product/3296)
+- [Adafruit DotStar LED Strip - Addressable Warm White - 30 LED/m - ~3000K](https://www.adafruit.com/product/2435?length=4)
+- [4-channel I2C-safe Bi-directional Logic Level Converter - BSS138K](https://www.adafruit.com/product/757)
+- [5v Power Supply]()
 ### Hardware
 
 ## Usage
