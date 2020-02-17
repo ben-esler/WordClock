@@ -37,11 +37,16 @@ ESP8266 based clock that spells the time with LEDs
 The user can set the time, add/remove birthdays, and LED brightness.
 
 #### Entering Setup:
-Hold down the setup button while plugging in the clock. A new wifi access point named "WordClock Setup" will appear in your devices wifi manager. Connecting to it will bring the user to the clock's setup webpage.
+Hold down the setup button while plugging in the clock. A new wifi access point named "WordClock Setup" will appear in a devices wifi manager. Connecting to it will bring the user to the clock's setup webpage.
 
 #### Setting Time:
+Time can be entered to be manually set or synced to the time of the device that is currntly connected to the clock.
+
 #### Adding/Removing Birthdays:
+There can be up to 10 birthdays that the clock can store.
+
 #### LED Brightness:
+The brightness of the LEDs range from the minimum/maximum brightness and are adjusted based off the ambient room brightness.
 #### Exiting Setup:
 To exit the setup when one of the below happens:  
 - No one connects after 5 minutes
