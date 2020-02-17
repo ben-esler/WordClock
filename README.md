@@ -46,7 +46,12 @@ Time can be entered to be manually set or synced to the time of the device that 
 There can be up to 10 birthdays that the clock can store.
 
 #### LED Brightness:
-The brightness of the LEDs range from the minimum/maximum brightness and are adjusted based off the ambient room brightness.
+The brightness of the LEDs range from the min/max brightness and are adjusted based off the room's ambient brightness.  
+The clock will need to be calibrated for the ambient brightness. 
+- When the room is dark press the 'Capture Dim Room'
+- When the room is well lit press the 'Capture Bright Room'
+- Then set the prefered min/max brightness values
+
 #### Exiting Setup:
 To exit the setup when one of the below happens:  
 - No one connects after 5 minutes
