@@ -10,7 +10,7 @@ ESP8266 based clock that spells the time with LEDs
 - [Physical Build](#physical-build)
   * [Components](#components)
   * [Hardware](#hardware)
-- [Setting Up The Clock](setting-up-the-clock)
+- [Setting Up The Clock](#setting-up-the-clock)
 - [Displaying Time](#displaying-time)
 
 ## Libraries
