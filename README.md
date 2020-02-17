@@ -34,7 +34,7 @@ ESP8266 based clock that spells the time with LEDs
 
 ## Setting Up The Clock
 <img align="right" width="40%" height="auto" src="https://github.com/ben-esler/WordClock/blob/master/HTML%20Testing/example.jpg">
-During setup the user can set the time, add/remove birthdays, and set led brightness.
+The user can set the time, add/remove birthdays, and LED brightness.
 
 #### Entering Setup:
 Hold down the setup button while plugging in the clock. A new wifi access point named "WordClock Setup" will appear in your devices wifi manager. Connecting to it will bring the user to the clock's setup webpage.
