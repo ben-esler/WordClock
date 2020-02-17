@@ -1,11 +1,7 @@
 # WordClock
-ESP8266 based clock that spells the time with LEDs
-
-## About
+ESP8266 based clock that spells the time with LEDs, using an RTC for time and a captive portal for settings.
 
 ## Table of Contents
-
-- [About](#about)
 - [Libraries](#libraries)
 - [Physical Build](#physical-build)
   * [Components](#components)
@@ -31,6 +27,8 @@ ESP8266 based clock that spells the time with LEDs
 - [resistor]()
 - [5v Power Supply]()
 ### Hardware
+- Wood
+- Clear Resin
 
 ## Setting Up The Clock
 <img align="right" width="40%" height="auto" src="https://github.com/ben-esler/WordClock/blob/master/HTML%20Testing/example.jpg">
@@ -53,11 +51,13 @@ The clock will need to be calibrated for the ambient brightness.
 - Then set the prefered min/max brightness values
 
 #### Exiting Setup:
-To exit the setup when one of the below happens:  
+The Setup will exit when one of the following happens:  
 - No one connects after 5 minutes
 - User clicks End Setup button
 - Last user disconnects from Access Point
 
 ## Displaying Time
+The clock will update the LEDS every 5 minutes to spell out the time.
 ### Transitions:
 ### Birthdays:
+On birthdays the clock will show "Happy Birthday" everytime it changes time.
