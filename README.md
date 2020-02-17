@@ -10,9 +10,8 @@ ESP8266 based clock that spells the time with LEDs
 - [Physical Build](#physical-build)
   * [Components](#components)
   * [Hardware](#hardware)
-- [Running The Clock](#running-the-clock)
-  * [Setup Mode](#setup-mode)
-  * [Displaying Time](#displaying-time)
+- [Setting Up The Clock](setting-up-the-clock)
+- [Displaying Time](#displaying-time)
 
 ## Libraries
 - [RTClib](https://github.com/adafruit/RTClib)
@@ -33,8 +32,7 @@ ESP8266 based clock that spells the time with LEDs
 - [5v Power Supply]()
 ### Hardware
 
-## Running The Clock
-### Setup Mode:
+## Setting Up The Clock
 <img align="right" width="40%" height="auto" src="https://github.com/ben-esler/WordClock/blob/master/HTML%20Testing/example.jpg">
 During setup the user can set the time, add/remove birthdays, and set led brightness.
 
@@ -50,6 +48,6 @@ To exit the setup when one of the below happens:
 - User clicks End Setup button
 - Last user disconnects from Access Point
 
-### Displaying Time
-#### Transitions:
-#### Birthdays:
+## Displaying Time
+### Transitions:
+### Birthdays:
