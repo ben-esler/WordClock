@@ -41,7 +41,7 @@ Hold down the setup button while plugging in the clock. A new wifi access point 
 Time can be entered to be manually set or synced to the time of the device that is currntly connected to the clock.
 
 #### Adding/Removing Birthdays:
-There can be up to 10 birthdays that the clock can store.
+There can be up to 10 birthdays stored on the clock.
 
 #### LED Brightness:
 The brightness of the LEDs range from the min/max brightness and are adjusted based off the room's ambient brightness.  
