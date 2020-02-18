@@ -31,7 +31,8 @@ ESP8266 based clock that spells the time with LEDs, using an RTC for time and a 
 - Clear Resin
 
 ## Setting Up The Clock
-<img align="right" width="40%" height="auto" border="1" src="https://github.com/ben-esler/WordClock/blob/master/HTML%20Testing/example.png">
+<img align="right" width="40%" height="auto" border="1px solid black"
+ src="https://github.com/ben-esler/WordClock/blob/master/HTML%20Testing/example.png">
 The user can set the time, add/remove birthdays, and LED brightness.
 
 #### Entering Setup:
