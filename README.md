@@ -54,7 +54,7 @@ The clock will need to be calibrated for the ambient brightness.
 The Setup will exit when one of the following happens:  
 - No one connects after 5 minutes
 - User clicks End Setup button
-- Last user disconnects from Access Point
+- Last user disconnects from the Access Point
 
 ## Displaying Time
 The clock will update the LEDS every 5 minutes to spell out the time.
