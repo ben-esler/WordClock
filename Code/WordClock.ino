@@ -1,9 +1,13 @@
 #include "RTClib.h"
 #include "EEPROM.h"
 RTC_DS1307 rtc;
-const int lightSensorPin = 0;
 #include "Configuration.h"
+#include "DeltaTime.h"
+#include "LightSensor.h"
+#include "Display.h"
 #include "SetupMode.h"
+
+
 
 void setup() {
   Serial.begin(57600);
@@ -19,14 +23,26 @@ void setup() {
   loadConfig();
   printConfig();
   
-  if(1 == 1){   //Check if setup button is pressed
+  if(1 == 0){   //Check if setup button is pressed
     //Have leds show setup
     runSetup();
   }
   EEPROM.end();
+  oldTime = millis();
+  deltaTime = millis();
+  for(uint8_t i = 0; i < 100; i++){
+    calculateDeltaTime();
+    updateAmbientBrightness(100);
+    delay(1); // delay in between reads for stability
+  }
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+  calculateDeltaTime();
+  updateAmbientBrightness(30000); //30000 for 30 seconds for adjustment time
+  //printAmbientBrightness(); //used for debug of sensor
+  
+//  updateBrightness();
+//  updateDisplay();
 
 }

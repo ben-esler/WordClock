@@ -46,13 +46,13 @@ void handlerBirthdayRemove() {
 }
 
 void handlerCaptureDim() {
- uint16_t sensorReading = analogRead(lightSensorPin);
+ uint16_t sensorReading = sensorSample(150);
  setConfigVariable(EE_SENSORMIN, sensorMin, sensorReading);
  logAndRespond("Captured Dim Room at " + String(sensorReading));
 }
 
 void handlerCaptureBright() {
- uint16_t sensorReading = analogRead(lightSensorPin);
+ uint16_t sensorReading = sensorSample(150);
  setConfigVariable(EE_SENSORMAX, sensorMax, sensorReading);
  logAndRespond("Captured Bright Room at " + String(sensorReading));
 }
