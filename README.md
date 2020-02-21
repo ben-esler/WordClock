@@ -23,9 +23,9 @@ ESP8266 based clock that spells the time with LEDs, using an RTC for time and a 
 - [Adafruit DotStar LED Strip - Addressable Warm White - 30 LED/m - ~3000K - 4 meters](https://www.adafruit.com/product/2435?length=4)
 - [4-channel I2C-safe Bi-directional Logic Level Converter - BSS138K](https://www.adafruit.com/product/757)
 - [Photo Transistor Light Sensor](https://www.adafruit.com/product/2831)
-- [button]()
-- [resistor]()
-- [5v Power Supply]()
+- [10k ohm Resistor]()
+- [Momentary Button]()
+- [5v 10A Power Supply](https://www.adafruit.com/product/658)
 ### Hardware
 - Wood
 - Clear Resin
