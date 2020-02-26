@@ -26,6 +26,7 @@ ESP8266 based clock that spells the time with LEDs, using an RTC for time and a 
 - [10k ohm Resistor]()
 - [Momentary Button]()
 - [5v 10A Power Supply](https://www.adafruit.com/product/658)
+- [Power Connector 2.1x5.5mm](https://www.digikey.com/product-detail/en/tensility-international-corp/10-02878/839-1448-ND/8635385)
 ### Hardware
 - Wood
 - Clear Resin
