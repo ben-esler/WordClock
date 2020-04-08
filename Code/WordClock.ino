@@ -12,14 +12,12 @@ RTC_DS1307 rtc;
 void setup() {
   Serial.begin(57600);
   EEPROM.begin(88); //number of bytes available
+  strip.begin();
+  strip.show();
+  rtc.begin();
   Serial.println("");
   Serial.println("");
   
-  if (! rtc.begin()) {
-    Serial.println("Couldn't find RTC");
-    //Have error on LEDS
-    while (1);
-  }
   loadConfig();
   printConfig();
   
@@ -41,8 +39,6 @@ void loop() {
   calculateDeltaTime();
   updateAmbientBrightness(30000); //30000 for 30 seconds for adjustment time
   //printAmbientBrightness(); //used for debug of sensor
-  
-//  updateBrightness();
-//  updateDisplay();
+  //draw();
 
 }
