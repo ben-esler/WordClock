@@ -11,9 +11,13 @@ void changeFloatOverDelta(float &current, float target, uint32_t transitionTime)
   current = current+(target-current)*(float(deltaTime)/transitionTime);
 }
 
-float lerp(float a, float b, float x)
-{
+float lerp(float a, float b, float x){
   return a + x * (b - a);
+}
+
+float unlerp(float inMin, float inMax, float input){
+  float unclamped = (input-inMin)/(inMax-inMin);
+  return constrain(unclamped, 0.0, 1.0);
 }
 
 // Easing Functions
@@ -25,7 +29,7 @@ float easeIn(float t, float power){
   return pow(t, power);
 }
 float easeOut(float t, float power){
-  return 1.0-abs(pow(t-1, power));
+  return -(pow(t-1, power)-1);
 }
 float easeInOut(float t, float power){
   return t<0.5 ? easeIn(t*2.0,power)/2.0 : easeOut(t*2.0-1.0, power)/2+0.5;
