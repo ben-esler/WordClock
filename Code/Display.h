@@ -5,7 +5,6 @@
 Adafruit_DotStar strip(NUMPIXELS, DATAPIN, CLOCKPIN, DOTSTAR_BRG);
 
 uint16_t transitionTime = 0;
-int8_t transitioning = 0;
 float ledAlphas[121];
 uint8_t ledValues[121][3];
 
@@ -32,9 +31,9 @@ void transitionFill(uint16_t duration, boolean fadeIn){
 void transitionSpell(uint16_t duration, boolean fadeIn){
   if(transitionTime < duration){
     float transitionAlpha = (float)transitionTime/(float)duration;
-    float softness = 4;
+    float softness = 5;
     for(int8_t i = 0; i < ledQueLastIndex; i++){
-      float value = 1-unlerp(transitionAlpha*ledQueLastIndex-lerp(8,0,transitionAlpha),transitionAlpha*ledQueLastIndex+4,i);
+      float value = 1-unlerp(transitionAlpha*ledQueLastIndex-lerp(softness*2,0,transitionAlpha),transitionAlpha*ledQueLastIndex+softness,i);
       if(fadeIn){
         ledAlphas[ledQue[i]] = easeIn(value, 4);
       }
@@ -68,7 +67,7 @@ void ledAlphaToValues(){
 
 void draw(){
   if(transitioning == 1){
-    transitionSpell(5000, true);
+    transitionSpell(400*ledQueLastIndex, true);
   }
   if(transitioning == -1){
     transitionFill(5000, false);

@@ -43,14 +43,28 @@ void addWord(Word word){
 }
 
 
+void updateLedQueToBirthday(){
+  ledQueLastIndex = 0;
+  addWord(HAPPY);
+  addWord(BIRTH);
+  addWord(DAY);  
+}
 
-void updateLedQue(){
+void updateLedQueToTime(){
   ledQueLastIndex = 0;
   
   DateTime time = rtc.now();
   uint8_t minutes = time.minute();
-  uint8_t hours = time.hour();  
-  
+  uint8_t hours = time.hour();
+  if(minutes > 57){
+    if(hours == 23){
+      hours = 0;
+    }
+    else{
+      hours++;
+    }
+  }
+  Serial.println(hours);
   addWord(ITS);
 
   boolean isA    = (minutes >= 13 && minutes <= 17) || (minutes >= 43 && minutes <= 47); // quarter
@@ -72,10 +86,20 @@ void updateLedQue(){
   else if (minutes >= 48 && minutes <= 52) {  addWord(TEN_M); } //ten to
   else if (minutes >= 53 && minutes <= 57) {  addWord(FIVE_M); } //five to
    
-  if(isPast) { addWord(PAST); }
-  if(isTo) { addWord(TIL); hours = ((hours%12) + 1); }
+  if(isPast) {
+    addWord(PAST);
+  }
+  if(isTo) { 
+    addWord(TIL); 
+    if(hours != 23){
+      hours++; 
+    }
+    else{
+      hours = 0;
+    }
+  }
 
-  if     (hours == 0)      { addWord(MIDNIGHT); }
+  if      (hours == 0)      { addWord(MIDNIGHT); }
   else if (hours%12 == 1)  { addWord(ONE); }
   else if (hours%12 == 2)  { addWord(TWO); }
   else if (hours%12 == 3)  { addWord(THREE); }
@@ -89,5 +113,84 @@ void updateLedQue(){
   else if (hours%12 == 11) { addWord(ELEVEN); }
   else if (hours == 12)    { addWord(NOON); }
 
-  if (minutes >= 58 || minutes <= 2) {  addWord(OCLOCK); } //o'clock *//* hours = ((hours%12) + 1); }
+  if (minutes >= 58 || minutes <= 2 && hours%12 != 0) {  addWord(OCLOCK); } //o'clock *//* hours = ((hours%12) + 1); }
+}
+
+uint32_t timeSinceUpdate = 0;
+uint32_t timeToUpdateAt = 0;
+boolean isBirthday = 1;
+int8_t transitioning = 0; //-1 fading off, 1 fading on, 0 nothing
+
+enum clockStates {
+  idle,
+  transitionTimeOn,
+  transitionTimeOff,
+  transitionBirthdayOn,
+  transitionBirthdayOff,
+};
+
+void calculateNextUpdateTime(){
+  DateTime time = rtc.now();
+  uint8_t minutes = (time.minute()-3)/5*5+8-time.minute();
+  timeToUpdateAt = minutes*60000-time.second()*1000;
+  timeSinceUpdate = 0;
+}
+
+void checkIfBirthday(){
+  
+}
+
+enum clockStates clockState = transitionTimeOn;
+
+void clockUpdate(){
+  switch(clockState){
+    case idle:
+      if(timeSinceUpdate < timeToUpdateAt){
+        timeSinceUpdate += deltaTime;
+      }
+      else{
+        clockState = transitionTimeOff;
+      }
+      break;
+    case transitionTimeOn:
+      if(transitioning == 0){
+        updateLedQueToTime();
+        transitioning = 1;
+      }
+      else if(transitioning == 1){
+        calculateNextUpdateTime();
+        clockState = idle;
+      }
+      break;
+    case transitionTimeOff:
+      if(transitioning == 0){
+        transitioning = -1;
+      }
+      else if(transitioning == -1){
+        if(isBirthday){
+          clockState = transitionBirthdayOn;
+        }
+        else{
+          clockState = transitionTimeOn;
+        }
+      }
+      break;
+    case transitionBirthdayOn:
+      if(transitioning == 0){
+        updateLedQueToBirthday();
+        transitioning = 1;
+      }
+      else if(transitioning == 1){
+        clockState = transitionBirthdayOff;
+      }
+      break;
+    case transitionBirthdayOff:
+      if(transitioning == 0){
+        transitioning = -1;
+      }
+      else if(transitioning == -1){
+        clockState = transitionTimeOn;
+      }
+      break;
+  }
 }

@@ -11,8 +11,6 @@ RTC_DS1307 rtc;
 
 int16_t boardLedTime = 0;
 boolean boardLedOn = 0;
-int16_t timeSinceUpdate = 0;
-boolean isUpdating = 1;
 
   
 void setup() {
@@ -46,25 +44,8 @@ void loop() {
   calculateDeltaTime();
   updateAmbientBrightness(30000); //30000 for 30 seconds for adjustment time
   //printAmbientBrightness(); //used for debug of sensor
+  clockUpdate();
   draw();
-
-  if(isUpdating){
-    if(transitioning == 0){
-      updateLedQue();
-      transitioning = 1;
-      isUpdating = 0;
-    }
-  }
-  else{
-    if(timeSinceUpdate < 8000){
-      timeSinceUpdate += deltaTime;
-    }
-    else{
-      timeSinceUpdate = 0;
-      transitioning = -1;
-      isUpdating = 1;
-    }
-  }
   
   //Blink onboard led
   if(boardLedTime < 1000){
