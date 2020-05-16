@@ -8,7 +8,6 @@ uint16_t transitionTime = 0;
 float ledAlphas[121];
 uint8_t ledValues[121][3];
 
-
 void transitionFill(uint16_t duration, boolean fadeIn){
   if(transitionTime < duration){
     float transitionAlpha = (float)transitionTime/(float)duration;
@@ -73,9 +72,24 @@ void draw(){
     transitionFill(5000, false);
   }
   ledAlphaToValues();
-  for(int8_t i = 0; i < ledQueLastIndex; i++){
+  for(uint8_t i = 0; i < ledQueLastIndex; i++){
     uint8_t led = ledQue[i];
     strip.setPixelColor(led, ledValues[led][0], ledValues[led][1], ledValues[led][2]);
+  }
+  strip.show();
+}
+
+void drawSetup(){
+  uint8_t leds[17] = {110,120,0,10,60,93,81,73,57,51,37,27,39,47,63,69,83};
+  for(uint8_t i = 0; i < 17; i++){
+    strip.setPixelColor(leds[i], 128,128,128);
+  }
+  strip.show();
+}
+
+void drawClear(){
+  for(uint8_t i = 0; i < 121; i++){
+    strip.setPixelColor(i, 0,0,0);
   }
   strip.show();
 }

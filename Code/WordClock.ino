@@ -26,9 +26,11 @@ void setup() {
   loadConfig();
   printConfig();
   
-  if(1 == 0){   //Check if setup button is pressed
-    //Have leds show setup
+  if(1 == 1){   //Check if setup button is pressed
+    digitalWrite(2,  true);
+    drawSetup();
     runSetup();
+    drawClear();
   }
   EEPROM.end();
   oldTime = millis();

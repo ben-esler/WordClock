@@ -42,7 +42,6 @@ void addWord(Word word){
   }
 }
 
-
 void updateLedQueToBirthday(){
   ledQueLastIndex = 0;
   addWord(HAPPY);
@@ -64,7 +63,6 @@ void updateLedQueToTime(){
       hours++;
     }
   }
-  Serial.println(hours);
   addWord(ITS);
 
   boolean isA    = (minutes >= 13 && minutes <= 17) || (minutes >= 43 && minutes <= 47); // quarter
@@ -73,8 +71,7 @@ void updateLedQueToTime(){
 
   if (isA) { addWord(A); }
 
-  if      (minutes >= 58 || minutes <= 2)  {  addWord(OCLOCK); } //o'clock
-  else if (minutes >= 3 && minutes <= 7)   {  addWord(FIVE_M); } //five past
+  if (minutes >= 3 && minutes <= 7)   {  addWord(FIVE_M); } //five past
   else if (minutes >= 8 && minutes <= 12)  {  addWord(TEN_M); } //ten past
   else if (minutes >= 13 && minutes <= 17) {  addWord(QUARTER); } //quarter past
   else if (minutes >= 18 && minutes <= 22) {  addWord(TWENTY); } //twenty past
@@ -137,7 +134,14 @@ void calculateNextUpdateTime(){
 }
 
 void checkIfBirthday(){
-  
+  isBirthday = 0;
+  DateTime time = rtc.now();
+  for(uint8_t i = 0; i<10; i++){
+    if(birthdays[i].month==time.month() && birthdays[i].day==time.day()){
+      isBirthday = 1;
+      break;
+    }
+  }
 }
 
 enum clockStates clockState = transitionTimeOn;
@@ -159,6 +163,7 @@ void clockUpdate(){
       }
       else if(transitioning == 1){
         calculateNextUpdateTime();
+        checkIfBirthday();
         clockState = idle;
       }
       break;
